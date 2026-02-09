@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sapan Gandhi • Portfolio</title>
+  <meta name="description" content="Portfolio of Sapan Gandhi — Full Stack Web Developer, AI/ML Enthusiast, and DSA practitioner." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='0.9em' font-size='90'%3E🚀%3C/text%3E%3C/svg%3E">
+  <style>
+    :root{
+      --bg: #0b0f14;
+      --panel: #0f1621;
+      --text: #e6eef8;
+      --muted: #a8b3c7;
+      --brand: #5eead4; /* teal */
+      --accent: #60a5fa; /* blue */
+      --ring: rgba(94,234,212,0.35);
+      --shadow: 0 10px 30px rgba(0,0,0,0.35);
+      --radius: 16px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, 'Helvetica Neue', Arial, 'Noto Sans', 'Apple Color Emoji','Segoe UI Emoji';
+      background: radial-gradient(1000px 600px at 80% -10%, rgba(96,165,250,0.18), transparent 60%),
+                  radial-gradient(800px 500px at 0% 20%, rgba(94,234,212,0.12), transparent 60%),
+                  var(--bg);
+      color:var(--text);
+      line-height:1.6;
+      overflow-x:hidden;
+    }
+    a{color:var(--brand); text-decoration:none}
+    a:hover{text-decoration:underline}
+
+    /* Header */
+    header{
+      position:sticky; top:0; z-index:50;
+      backdrop-filter: blur(8px);
+      background: linear-gradient(to bottom, rgba(11,15,20,0.9), rgba(11,15,20,0.5));
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .container{max-width:1100px; margin:0 auto; padding:0 20px}
+    .nav{display:flex; align-items:center; justify-content:space-between; height:64px}
+    .logo{display:flex; align-items:center; gap:10px; font-weight:800; letter-spacing:0.3px}
+    .logo-badge{
+      width:34px; height:34px; border-radius:10px; display:grid; place-items:center;
+      background:linear-gradient(135deg, var(--brand), var(--accent)); color:#0b0f14; font-weight:900;
+      box-shadow: var(--shadow);
+    }
+    nav ul{display:flex; list-style:none; gap:18px; padding:0; margin:0}
+    nav a{color:var(--text); opacity:0.9}
+    nav a.active, nav a:hover{color:white; opacity:1}
+    .menu-btn{display:none}
+
+    /* Sections */
+    section{padding:80px 0}
+    .hero{display:grid; 
+        grid-template-columns: 1.2fr 1fr; 
+        gap:40px;
+         align-items:center; 
+         padding-top:48px}
+    .headline{font-size:clamp(32px, 5vw, 56px); 
+        line-height:1.1; 
+        margin:0 0 14px; 
+        font-weight:900}
+    .subhead{
+        font-size:clamp(16px, 2.2vw, 18px); 
+        color:var(--muted);
+         margin:0 0 24px
+    }
+    .cta-row{
+        display:flex; 
+        gap:14px; 
+        flex-wrap:wrap}
+    .btn{
+      display:inline-flex;
+       align-items:center; 
+       gap:10px; padding:12px 16px; 
+       border-radius: 12px; 
+       border:1px solid rgba(255,255,255,0.08);
+      background:linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+      color:white;
+     font-weight:600; 
+     box-shadow: var(--shadow); 
+     cursor:pointer
+    }
+    .btn.primary{background:linear-gradient(135deg, var(--brand), var(--accent)); color:#061018; border:none}
+    .btn:focus{outline:3px solid var(--ring)}
+
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+      border:1px solid rgba(255,255,255,0.08);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    /* Updated Avatar Styles - Smaller and Circular */
+    .avatar{
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      border: 3px solid rgba(255,255,255,0.1);
+      background: radial-gradient(100px 100px at 70% 20%, rgba(94,234,212,0.22), transparent),
+                  linear-gradient(145deg, #0e1520, #111827);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      margin: 0 auto;
+    }
+    
+    .avatar img{
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+
+    .pill-row{display:flex; flex-wrap:wrap; gap:10px; margin-top:14px}
+    .pill{padding:8px 12px; border-radius: 999px; background:rgba(94,234,212,0.12); border:1px solid rgba(94,234,212,0.35); color:#d8fff7; font-weight:600}
+
+    /* Grid */
+    .grid{display:grid; gap:20px}
+    .grid.skills{grid-template-columns: repeat(auto-fit, minmax(220px, 1fr))}
+    .grid.projects{grid-template-columns: repeat(auto-fit, minmax(280px, 1fr))}
+
+    .card-inner{padding:20px}
+    .muted{color:var(--muted)}
+    h2{font-size:28px; margin:0 0 16px}
+    h3{font-size:20px; margin:0 0 8px}
+
+    /* Timeline */
+    .timeline{position:relative; margin-left:10px}
+    .timeline::before{content:""; position:absolute; left:10px; top:0; bottom:0; width:2px; background:linear-gradient(var(--brand), transparent)}
+    .t-item{position:relative; margin:22px 0 22px 30px}
+    .t-item::before{content:""; position:absolute; left:-22px; top:6px; width:10px; height:10px; border-radius:999px; background:var(--brand); box-shadow:0 0 0 4px rgba(94,234,212,0.25)}
+
+    /* Contact */
+    #contact {
+      text-align: center;
+      padding: 40px;
+      background: #060912;
+      color: white;
+    }
+
+    #contact h2 {
+      font-size: 2rem;
+      margin-bottom: 20px;
+    }
+
+    #contact form {
+      max-width: 500px;
+      margin: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    #contact input,
+    #contact textarea {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #333;
+      background: #111827;
+      color: white;
+      font-size: 1rem;
+    }
+
+    #contact textarea {
+      resize: none;
+    }
+
+    #contact button {
+      background: #3b82f6;
+      color: white;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: 0.3s;
+    }
+
+    #contact button:hover {
+      background: #2563eb;
+    }
+
+    /* Footer */
+    footer{padding:30px 0; border-top:1px solid rgba(255,255,255,0.06); color:var(--muted)}
+
+    /* Utilities */
+    .row{display:flex; gap:16px; flex-wrap:wrap; align-items:center}
+    .badge{padding:6px 10px; border-radius:999px; background:rgba(96,165,250,0.15); border:1px solid rgba(96,165,250,0.35); color:#e4f0ff; font-weight:600}
+
+    /* Responsive */
+    @media (max-width: 900px){
+      .hero{
+        grid-template-columns:1fr; 
+        text-align:center;
+        gap: 40px;
+      }
+      .avatar{
+        width: 180px;
+        height: 180px;
+        order: -1; /* Move avatar above text on mobile */
+      }
+      .cta-row{justify-content:center}
+      .contact-grid{grid-template-columns: 1fr}
+      nav ul{display:none}
+      .menu-btn{display:inline-flex}
+      .grid.projects{grid-template-columns: 1fr}
+    }
+    
+    @media (max-width: 600px){
+      .avatar{
+        width: 160px;
+        height: 160px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container nav">
+      <div class="logo">
+        <div class="logo-badge">SG</div>
+        <span>Sapan Gandhi</span>
+      </div>
+      <nav aria-label="Primary">
+        <button class="btn menu-btn" id="menuBtn" aria-expanded="false" aria-controls="mobileMenu">☰ Menu</button>
+        <ul id="desktopMenu">
+          <li><a href="#about" class="active">About</a></li>
+          <li><a href="#skills">Skills</a></li>
+          <li><a href="#projects">Projects</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- HERO -->
+    <section class="hero" id="about">
+      <div>
+        <p class="badge">Open to Internships & Projects</p>
+        <h1 class="headline">Hi, I'm <span style="background: linear-gradient(90deg, var(--brand), var(--accent)); -webkit-background-clip:text; background-clip:text; color:transparent">Sapan Gandhi</span>.</h1>
+        <p class="subhead">Full Stack Web Developer & AI/ML Enthusiast passionate about building modern web applications and intelligent systems. I work with <strong>MERN Stack</strong>, <strong>Python</strong>, and <strong>AI/ML fundamentals</strong>.</p>
+        <div class="cta-row">
+          <a class="btn primary" href="#projects">🚀 View Projects</a>
+          <a class="btn" href="#contact">📩 Contact</a>
+        </div>
+        <div class="pill-row" aria-label="Quick facts">
+          <span class="pill">📍 India</span>
+          <a class="pill" href="tel:+919301488039">📞 9301488039</a>
+          <a class="pill" href="mailto:sapgandhi811@gmail.com">✉️ sapgandhi811@gmail.com</a>
+        </div>
+      </div>
+      <!-- Updated Avatar - Small Circular -->
+      <div class="avatar">
+        <img src="bg.jpg" alt="Sapan Gandhi" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ccircle cx=%2250%22 cy=%2250%22 r=%2245%22 fill=%22%2305c2c2%22/%3E%3Ctext x=%2250%22 y=%2260%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2224%22%3ESG%3C/text%3E%3C/svg%3E'">
+      </div>
+    </section>
+
+    <!-- SKILLS -->
+    <section id="skills">
+      <h2>Skills</h2>
+      <p class="muted">Core technologies I specialize in and actively develop with.</p>
+      <div class="grid skills">
+        <article class="card">
+          <div class="card-inner">
+            <h3>Full Stack Development</h3>
+            <p class="muted">Building complete web applications from frontend to backend.</p>
+            <div class="pill-row">
+              <span class="pill">React.js</span>
+              <span class="pill">Node.js</span>
+              <span class="pill">Express.js</span>
+              <span class="pill">MongoDB</span>
+              <span class="pill">REST APIs</span>
+              <span class="pill">JavaScript (ES6+)</span>
+              <span class="pill">HTML5/CSS3</span>
+            </div>
+          </div>
+        </article>
+        <article class="card">
+          <div class="card-inner">
+            <h3>AI/ML Enthusiast</h3>
+            <p class="muted">Exploring machine learning and artificial intelligence fundamentals.</p>
+            <div class="pill-row">
+              <span class="pill">Python</span>
+              <span class="pill">NumPy</span>
+              <span class="pill">Pandas</span>
+              <span class="pill">Scikit-learn</span>
+              <span class="pill">TensorFlow</span>
+              <span class="pill">Data Analysis</span>
+            </div>
+          </div>
+        </article>
+        <article class="card">
+          <div class="card-inner">
+            <h3>Tools & DevOps</h3>
+            <p class="muted">Modern development workflow and deployment tools.</p>
+            <div class="pill-row">
+              <span class="pill">Git & GitHub</span>
+              <span class="pill">VS Code</span>
+              <span class="pill">Postman</span>
+              <span class="pill">MongoDB Atlas</span>
+              <span class="pill">Heroku/Vercel</span>
+              <span class="pill">Chrome DevTools</span>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- PROJECTS -->
+    <section id="projects">
+      <h2>Projects</h2>
+      <p class="muted">A showcase of my recent full-stack and AI/ML related projects.</p>
+      <div class="grid projects">
+        <article class="card">
+          <div class="card-inner">
+            <h3>Personal Expense Tracker</h3>
+            <p class="muted">Full-stack expense tracking application with user authentication, expense categorization, and financial insights dashboard. Built with MERN stack.</p>
+            <div class="pill-row">
+              <span class="pill">React</span>
+              <span class="pill">Node.js</span>
+              <span class="pill">MongoDB</span>
+              <span class="pill">JWT Auth</span>
+            </div>
+            <div class="row" style="margin-top:16px">
+              <a class="btn" href="#" onclick="toast('Demo link coming soon!')">Live Demo</a>
+              <a class="btn" href="#" onclick="toast('GitHub link coming soon!')">Source</a>
+            </div>
+          </div>
+        </article>
+        <article class="card">
+          <div class="card-inner">
+            <h3>Job Recommendation Website</h3>
+            <p class="muted">AI-powered job matching platform that analyzes resumes and suggests relevant positions based on skills matching algorithms.</p>
+            <div class="pill-row">
+              <span class="pill">Node.js</span>
+              <span class="pill">Express.js</span>
+              <span class="pill">JavaScript</span>
+              <span class="pill">HTML5</span>
+              <span class="pill">CSS3</span>
+              <span class="pill">REST API</span>
+              <span class="pill">JWT</span>
+              <span class="pill">JSON</span>
+            </div>
+            <div class="row" style="margin-top:16px">
+              <a class="btn" href="#" onclick="toast('Demo link coming soon!')">Live Demo</a>
+              <a class="btn" href="#" onclick="toast('GitHub link coming soon!')">Source</a>
+            </div>
+          </div>
+        </article>
+        <article class="card">
+          <div class="card-inner">
+            <h3>Full-Stack Weather App</h3>
+            <p class="muted">Real-time weather application with location-based forecasts, historical data, and interactive maps. Integrated with multiple weather APIs.</p>
+            <div class="pill-row">
+              <span class="pill">Node.js</span>
+              <span class="pill">Express.js</span>
+              <span class="pill">JavaScript ES6+</span>
+              <span class="pill">HTML5 & CSS3</span>
+              <span class="pill">Browser APIs</span>
+            </div>
+            <div class="row" style="margin-top:16px">
+              <a class="btn" href="#" onclick="toast('Demo link coming soon!')">Live Demo</a>
+              <a class="btn" href="#" onclick="toast('GitHub link coming soon!')">Source</a>
+            </div>
+          </div>
+        </article>
+        <article class="card">
+          <div class="card-inner">
+            <h3>Portfolio Website</h3>
+            <p class="muted">This responsive portfolio website showcasing my projects and skills with modern design, smooth animations, and contact functionality.</p>
+            <div class="pill-row">
+              <span class="pill">HTML5</span>
+              <span class="pill">CSS3</span>
+              <span class="pill">JavaScript</span>
+            </div>
+            <div class="row" style="margin-top:16px">
+              <button class="btn" onclick="scrollToTop()">Scroll to Top</button>
+              <a class="btn" href="#" onclick="toast('GitHub link coming soon!')">Source</a>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <div class="timeline" aria-label="Learning Timeline" style="margin-top:40px">
+        <div class="t-item">
+          <h4>2025 — Full Stack Development</h4>
+          <p class="muted">Mastering MERN stack and building complete web applications.</p>
+        </div>
+        <div class="t-item">
+          <h4>2025 — AI/ML Fundamentals</h4>
+          <p class="muted">Learning machine learning algorithms and data science techniques.</p>
+        </div>
+        <div class="t-item">
+          <h4>2025 — System Design</h4>
+          <p class="muted">Understanding scalable architecture and database design patterns.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact">
+      <h2>Contact Me</h2>
+      <form action="https://formspree.io/f/xdklapql" method="POST">
+        <div class="form-group">
+          <input type="text" name="name" placeholder="Your Name" required>
+        </div>
+        <div class="form-group">
+          <input type="email" name="email" placeholder="Your Email" required>
+        </div>
+        <div class="form-group">
+          <textarea name="message" placeholder="Your Message" rows="5" required></textarea>
+        </div>
+        <button type="submit">Send</button>
+      </form>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      © <span id="year"></span> Sapan Gandhi • Full Stack Developer & AI/ML Enthusiast
+    </div>
+  </footer>
+
+  <script>
+    // Smooth scroll for in-page links
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', e => {
+        const id = a.getAttribute('href');
+        if(id.length > 1){
+          e.preventDefault();
+          document.querySelector(id)?.scrollIntoView({behavior:'smooth', block:'start'});
+        }
+      });
+    });
+
+    // Active link highlighting on scroll
+    const sections = [...document.querySelectorAll('main section')];
+    const navLinks = [...document.querySelectorAll('nav a')];
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if(entry.isIntersecting){
+          const id = '#' + entry.target.id;
+          navLinks.forEach(l => l.classList.toggle('active', l.getAttribute('href') === id));
+        }
+      });
+    }, {rootMargin: '-40% 0px -55% 0px', threshold: 0});
+    sections.forEach(s => io.observe(s));
+
+    // Mobile menu toggle
+    const menuBtn = document.getElementById('menuBtn');
+    menuBtn?.addEventListener('click', () => {
+      const existing = document.getElementById('mobileMenu');
+      if(existing){ existing.remove(); menuBtn.setAttribute('aria-expanded','false'); return; }
+      const ul = document.createElement('ul');
+      ul.id = 'mobileMenu';
+      ul.style.cssText = 'position:absolute; right:20px; top:60px; background:#0f1621; border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:10px; list-style:none; display:grid; gap:8px; box-shadow: var(--shadow)';
+      ul.innerHTML = `<li><a href="#about">About</a></li>
+                      <li><a href="#skills">Skills</a></li>
+                      <li><a href="#projects">Projects</a></li>
+                      <li><a href="#contact">Contact</a></li>`;
+      document.querySelector('header .container').appendChild(ul);
+      menuBtn.setAttribute('aria-expanded','true');
+    });
+
+    // Toast notifications
+    function toast(msg){
+      const t = document.createElement('div');
+      t.textContent = msg;
+      t.style.cssText = 'position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:#0f1621; border:1px solid rgba(255,255,255,0.12); border-radius:999px; padding:10px 16px; box-shadow: var(--shadow); z-index:1000';
+      document.body.appendChild(t);
+      setTimeout(()=>t.remove(), 2000);
+    }
+
+    // Copy helpers
+    async function copyToClipboard(text){
+      try{ await navigator.clipboard.writeText(text); toast('Copied!'); } catch{ toast('Copy failed'); }
+    }
+
+    // Footer year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Utility
+    function scrollToTop(){ window.scrollTo({top:0, behavior:'smooth'}); }
+  </script>
+</body>
+</html>
