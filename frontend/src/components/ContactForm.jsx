@@ -1,7 +1,6 @@
 import { useState } from 'react'
 
-// Change this to your backend URL in production (e.g. https://your-api.railway.app)
-const API_URL = import.meta.env.VITE_API_URL || 'https://my-portfolio-awe8.onrender.com'
+const API_URL = 'https://my-portfolio-awe8.onrender.com'
 
 function validate(name, email, msg) {
   const errs = {}
@@ -17,36 +16,26 @@ export default function ContactForm({ onSuccess }) {
   const [loading, setLoading] = useState(false)
   const [serverError, setServerError] = useState('')
 
-  const set = (k) => (e) => {
+  const set = k => e => {
     setFields(f => ({ ...f, [k]: e.target.value }))
-    if (errors[k]) setErrors(er => { const n = { ...er }; delete n[k]; return n })
-    if (serverError) setServerError('')
+    setErrors(er => { const n = { ...er }; delete n[k]; return n })
+    setServerError('')
   }
 
-  const handleSubmit = async (e) => {
+  const submit = async e => {
     e.preventDefault()
     const errs = validate(fields.name, fields.email, fields.msg)
     if (Object.keys(errs).length) { setErrors(errs); return }
-
     setLoading(true)
-    setServerError('')
-
     try {
       const res = await fetch(`${API_URL}/api/contact`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: fields.name.trim(),
-          email: fields.email.trim(),
-          message: fields.msg.trim(),
-        }),
+        body: JSON.stringify({ name: fields.name.trim(), email: fields.email.trim(), message: fields.msg.trim() }),
       })
-
       const data = await res.json()
-
       if (res.ok && data.success) {
         setFields({ name: '', email: '', msg: '' })
-        setErrors({})
         onSuccess?.()
       } else if (res.status === 400 && data.errors) {
         const mapped = {}
@@ -58,51 +47,45 @@ export default function ContactForm({ onSuccess }) {
         setServerError(data.message || 'Something went wrong. Please try again.')
       }
     } catch {
-      setServerError('Could not connect to server. Please email me directly at sapgandhi811@gmail.com')
+      setServerError('Cannot connect to server. Email me directly at sapgandhi811@gmail.com')
     } finally {
       setLoading(false)
     }
   }
 
-  const inputStyle = (key) => ({
+  const iS = hasErr => ({
     width: '100%', background: 'var(--bg)',
-    border: `1.5px solid ${errors[key] ? '#fb7185' : 'var(--border)'}`,
-    color: 'var(--text)', fontFamily: "'DM Sans',sans-serif", fontSize: 15,
-    padding: '13px 16px', borderRadius: 10, outline: 'none', resize: 'none',
-    transition: 'border-color .2s, box-shadow .2s',
+    border: `1.5px solid ${hasErr ? '#fb7185' : 'var(--b1)'}`,
+    color: 'var(--t1)', fontFamily: "'DM Sans',sans-serif", fontSize: 15,
+    padding: '12px 15px', borderRadius: 9, outline: 'none', resize: 'none',
+    transition: 'border-color .2s, box-shadow .2s', display: 'block',
   })
 
   return (
-    <form onSubmit={handleSubmit} noValidate>
-      {[
-        { key: 'name', label: 'Your Name', type: 'text', placeholder: 'e.g. Rahul Sharma' },
-        { key: 'email', label: 'Email Address', type: 'email', placeholder: 'you@company.com' },
-      ].map(({ key, label, type, placeholder }) => (
-        <div key={key} style={{ marginBottom: 22 }}>
-          <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: 'var(--text2)', marginBottom: 8 }}>{label}</label>
-          <input type={type} value={fields[key]} onChange={set(key)} placeholder={placeholder} style={inputStyle(key)}
+    <form onSubmit={submit} noValidate>
+      {[['name','Your Name','text','e.g. Rahul Sharma'],['email','Email Address','email','you@company.com']].map(([k,lbl,t,ph]) => (
+        <div key={k} style={{ marginBottom: 20 }}>
+          <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: 'var(--t2)', marginBottom: 7 }}>{lbl}</label>
+          <input type={t} value={fields[k]} onChange={set(k)} placeholder={ph} style={iS(errors[k])}
             onFocus={e => { e.target.style.borderColor = 'var(--cyan)'; e.target.style.boxShadow = '0 0 0 3px rgba(34,211,238,.1)' }}
-            onBlur={e => { if (!errors[key]) { e.target.style.borderColor = 'var(--border)'; e.target.style.boxShadow = '' } }}
-          />
-          {errors[key] && <div style={{ fontSize: 12, color: '#fb7185', marginTop: 6 }}>{errors[key]}</div>}
+            onBlur={e => { e.target.style.borderColor = errors[k] ? '#fb7185' : 'var(--b1)'; e.target.style.boxShadow = '' }} />
+          {errors[k] && <p style={{ fontSize: 12, color: '#fb7185', marginTop: 5 }}>{errors[k]}</p>}
         </div>
       ))}
-      <div style={{ marginBottom: 22 }}>
-        <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: 'var(--text2)', marginBottom: 8 }}>Message</label>
+      <div style={{ marginBottom: 20 }}>
+        <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: 'var(--t2)', marginBottom: 7 }}>Message</label>
         <textarea value={fields.msg} onChange={set('msg')} placeholder="Tell me about your project or opportunity..." rows={5}
-          style={{ ...inputStyle('msg'), lineHeight: 1.6 }}
+          style={{ ...iS(errors.msg), lineHeight: 1.6 }}
           onFocus={e => { e.target.style.borderColor = 'var(--cyan)'; e.target.style.boxShadow = '0 0 0 3px rgba(34,211,238,.1)' }}
-          onBlur={e => { if (!errors.msg) { e.target.style.borderColor = 'var(--border)'; e.target.style.boxShadow = '' } }}
-        />
-        {errors.msg && <div style={{ fontSize: 12, color: '#fb7185', marginTop: 6 }}>{errors.msg}</div>}
+          onBlur={e => { e.target.style.borderColor = errors.msg ? '#fb7185' : 'var(--b1)'; e.target.style.boxShadow = '' }} />
+        {errors.msg && <p style={{ fontSize: 12, color: '#fb7185', marginTop: 5 }}>{errors.msg}</p>}
       </div>
-      {serverError && (
-        <div style={{ background: 'rgba(251,113,133,.1)', border: '1px solid rgba(251,113,133,.25)', borderRadius: 9, padding: '12px 16px', fontSize: 13.5, color: '#fb7185', marginBottom: 18 }}>
-          {serverError}
-        </div>
-      )}
-      <button type="submit" disabled={loading} style={{ width: '100%', padding: '14px', background: loading ? 'rgba(34,211,238,.6)' : 'var(--cyan)', color: '#000', fontWeight: 700, fontSize: 15, borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, cursor: loading ? 'not-allowed' : 'pointer', border: 'none', transition: 'all .2s' }}>
-        {loading ? (<><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ animation: 'spin 1s linear infinite' }}><path d="M21 12a9 9 0 11-6.219-8.56"/></svg>Sending…</>) : (<><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>Send Message</>)}
+      {serverError && <div style={{ background: 'rgba(251,113,133,.1)', border: '1px solid rgba(251,113,133,.25)', borderRadius: 9, padding: '11px 15px', fontSize: 13, color: '#fb7185', marginBottom: 16 }}>{serverError}</div>}
+      <button type="submit" disabled={loading} style={{ width: '100%', padding: '13px', background: loading ? 'rgba(34,211,238,.6)' : 'var(--cyan)', color: '#000', fontWeight: 700, fontSize: 15, borderRadius: 9, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, cursor: loading ? 'not-allowed' : 'pointer', border: 'none', transition: 'all .2s' }}>
+        {loading
+          ? <><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ animation: 'spin 1s linear infinite' }}><path d="M21 12a9 9 0 11-6.219-8.56"/></svg>Sending…</>
+          : <><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>Send Message</>
+        }
       </button>
     </form>
   )
