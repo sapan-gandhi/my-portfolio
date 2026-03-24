@@ -1,7 +1,7 @@
 import { useState } from 'react'
 
 // Change this to your backend URL in production (e.g. https://your-api.railway.app)
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000'
+const API_URL = import.meta.env.VITE_API_URL || 'https://my-portfolio-awe8.onrender.com'
 
 function validate(name, email, msg) {
   const errs = {}

@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000'
+const API_URL = import.meta.env.VITE_API_URL || 'https://my-portfolio-awe8.onrender.com'
 
 const SUGGESTED = [
   "What are your skills?",
