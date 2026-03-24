@@ -1,6 +1,6 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
-const API_URL = 'https://my-portfolio-awe8.onrender.com'
+const API_URL = import.meta.env.VITE_API_URL || 'https://my-portfolio-awe8.onrender.com'
 
 function validate(name, email, msg) {
   const errs = {}
@@ -15,6 +15,16 @@ export default function ContactForm({ onSuccess }) {
   const [errors, setErrors] = useState({})
   const [loading, setLoading] = useState(false)
   const [serverError, setServerError] = useState('')
+  const [waking, setWaking] = useState(false)
+
+  // Wake up Render's free-tier server as soon as the form mounts
+  useEffect(() => {
+    setWaking(true)
+    fetch(`${API_URL}/health`, { signal: AbortSignal.timeout(30000) })
+      .catch(() => {}) // silence errors — this is just a warm-up
+      .finally(() => setWaking(false))
+  }, [])
+
 
   const set = k => e => {
     setFields(f => ({ ...f, [k]: e.target.value }))
@@ -81,7 +91,8 @@ export default function ContactForm({ onSuccess }) {
         {errors.msg && <p style={{ fontSize: 12, color: '#fb7185', marginTop: 5 }}>{errors.msg}</p>}
       </div>
       {serverError && <div style={{ background: 'rgba(251,113,133,.1)', border: '1px solid rgba(251,113,133,.25)', borderRadius: 9, padding: '11px 15px', fontSize: 13, color: '#fb7185', marginBottom: 16 }}>{serverError}</div>}
-      <button type="submit" disabled={loading} style={{ width: '100%', padding: '13px', background: loading ? 'rgba(34,211,238,.6)' : 'var(--cyan)', color: '#000', fontWeight: 700, fontSize: 15, borderRadius: 9, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, cursor: loading ? 'not-allowed' : 'pointer', border: 'none', transition: 'all .2s' }}>
+      {waking && !loading && <div style={{ textAlign: 'center', fontSize: 12, color: 'var(--t3)', marginBottom: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ animation: 'spin 1s linear infinite' }}><path d="M21 12a9 9 0 11-6.219-8.56"/></svg>Connecting to server…</div>}
+      <button type="submit" disabled={loading || waking} style={{ width: '100%', padding: '13px', background: (loading || waking) ? 'rgba(34,211,238,.6)' : 'var(--cyan)', color: '#000', fontWeight: 700, fontSize: 15, borderRadius: 9, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, cursor: (loading || waking) ? 'not-allowed' : 'pointer', border: 'none', transition: 'all .2s' }}>
         {loading
           ? <><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ animation: 'spin 1s linear infinite' }}><path d="M21 12a9 9 0 11-6.219-8.56"/></svg>Sending…</>
           : <><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>Send Message</>

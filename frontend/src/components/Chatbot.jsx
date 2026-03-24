@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 
-const API_URL = 'https://my-portfolio-awe8.onrender.com'
+const API_URL = import.meta.env.VITE_API_URL || 'https://my-portfolio-awe8.onrender.com'
 
 const SUGGESTED = [
   "What are your skills?",
@@ -31,9 +31,19 @@ export default function Chatbot() {
   const bottomRef = useRef(null)
   const inputRef = useRef(null)
 
+  const hasWoken = useRef(false)
   useEffect(() => {
-    if (open) { setUnread(0); setTimeout(() => inputRef.current?.focus(), 300) }
+    if (open) {
+      setUnread(0)
+      setTimeout(() => inputRef.current?.focus(), 300)
+      // Wake up Render free-tier server on first open
+      if (!hasWoken.current) {
+        hasWoken.current = true
+        fetch(`${API_URL}/health`, { signal: AbortSignal.timeout(30000) }).catch(() => {})
+      }
+    }
   }, [open])
+
 
   useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: 'smooth' }) }, [messages, loading])
 
