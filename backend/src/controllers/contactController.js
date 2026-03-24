@@ -33,7 +33,7 @@ async function sendContactEmail(req, res) {
 
     // Notification email → you (Sapan)
     await transporter.sendMail({
-      from: `"Portfolio Contact" <${process.env.GMAIL_USER || process.env.SMTP_USER || 'noreply@resend.dev'}>`,
+      from: `"Portfolio Contact" <onboarding@resend.dev>`,
       to: process.env.CONTACT_RECEIVER,
       replyTo: safeEmail,
       subject: `📬 New Portfolio Message from ${safeName}`,
@@ -43,7 +43,7 @@ async function sendContactEmail(req, res) {
 
     // Auto-reply email → sender
     await transporter.sendMail({
-      from: `"Sapan Gandhi" <${process.env.GMAIL_USER || process.env.SMTP_USER || 'noreply@resend.dev'}>`,
+      from: `"Sapan Gandhi" <onboarding@resend.dev>`,
       to: safeEmail,
       subject: `Thanks for reaching out, ${safeName}! 👋`,
       html: buildAutoReplyEmail(safeName),
