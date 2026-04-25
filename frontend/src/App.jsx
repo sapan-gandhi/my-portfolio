@@ -244,11 +244,11 @@ function ProjectCard({ p, index }) {
       <div className="pcard">
         {/* Visual */}
         <div className="pvis">
-          <span style={{ position: 'absolute', top: 18, left: 22, fontFamily: "'Syne',sans-serif", fontSize: 72, fontWeight: 800, color: 'rgba(255,255,255,.035)', lineHeight: 1, pointerEvents: 'none' }}>0{p.id}</span>
+          <span style={{ position: 'absolute', top: 18, left: 22, fontFamily: "'Syne',sans-serif", fontSize: 72, fontWeight: 800, color: 'rgba(255,255,255,.035)', lineHeight: 1, pointerEvents: 'none' }}>{String(p.id).padStart(2,'0')}</span>
           <div style={{ width: '100%', borderRadius: 12, overflow: 'hidden', background: 'var(--card2)', border: '1px solid var(--b2)', fontFamily: "'JetBrains Mono',monospace" }}>
             <div style={{ background: 'var(--bg2)', padding: '9px 13px', display: 'flex', alignItems: 'center', gap: 7, borderBottom: '1px solid var(--b1)' }}>
               {['#ff5f57','#febc2e','#28c840'].map(c => <span key={c} style={{ width: 9, height: 9, borderRadius: '50%', background: c, display: 'inline-block' }} />)}
-              <span style={{ fontSize: 10.5, color: 'var(--t4)', flex: 1, textAlign: 'center' }}>{p.id === 1 ? 'vital-scan-ai.vercel.app' : 'job-recommendation-system'}</span>
+              <span style={{ fontSize: 10.5, color: 'var(--t4)', flex: 1, textAlign: 'center' }}>{({1:'hiresense-ai-platform', 2:'vital-scan-ai.vercel.app', 3:'skillswap-platform', 4:'threat-detection-system'})[p.id]}</span>
             </div>
             <div style={{ padding: '14px 16px' }}>
               <div style={{ fontFamily: "'Syne',sans-serif", fontSize: 19, fontWeight: 800, color: 'var(--t1)', lineHeight: 1.15, marginBottom: 5 }}>{p.title}</div>
@@ -260,10 +260,7 @@ function ProjectCard({ p, index }) {
                 })}
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 7 }}>
-                {(p.id === 1
-                  ? [['ML','Prediction'],['Live','Deployed'],['REST','API'],['Full','Stack']]
-                  : [['ML','Matching'],['NLP','Profiling'],['API','REST'],['DB','MongoDB']]
-                ).map(([v, l]) => (
+                {({1:[['AI','Resume Analysis'],['ML','Skill Match'],['API','REST Backend'],['DB','MongoDB']],2:[['ML','Prediction'],['Live','Deployed'],['REST','API'],['Full','Stack']],3:[['JWT','Auth'],['MERN','Stack'],['API','REST'],['DB','MongoDB']],4:[['NLP','Pipeline'],['TF-IDF','Vectors'],['FastAPI','Backend'],['ML','Classifier']]}[p.id] || [['ML','Model'],['API','REST'],['Full','Stack'],['DB','MongoDB']]).map(([v, l]) => (
                   <div key={l} style={{ background: 'var(--bg3)', borderRadius: 7, padding: '7px 9px', border: '1px solid var(--b1)' }}>
                     <div style={{ fontFamily: "'Syne',sans-serif", fontSize: 15, fontWeight: 800, color: 'var(--cyan)' }}>{v}</div>
                     <div style={{ fontSize: 9.5, color: 'var(--t3)', fontFamily: "'DM Sans',sans-serif" }}>{l}</div>
