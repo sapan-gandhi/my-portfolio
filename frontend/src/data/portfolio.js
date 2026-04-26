@@ -58,7 +58,9 @@ export const projects = [
     techStack: ["React", "Node.js", "MongoDB", "ML Concepts", "REST API", "Tailwind CSS"],
     impact: "Reduces job search friction by giving candidates actionable feedback before they apply.",
     github: "https://github.com/sapan-gandhi/HireSense-AI",
-    demo: "#", demoLabel: "Coming Soon", demoDisabled: true,
+    demo: "https://hire-sense-ai-mocha.vercel.app",
+    demoLabel: "Live Demo",
+    demoDisabled: false,
   },
   {
     id: 2,
@@ -73,7 +75,9 @@ export const projects = [
     techStack: ["Python", "React", "Node.js", "Scikit-learn", "REST API", "Vercel"],
     impact: "Bridges the gap between raw vitals data and actionable health intelligence for early intervention.",
     github: "https://github.com/sapan-gandhi/VitalScan-AI",
-    demo: "https://vital-scan-ai-drab.vercel.app", demoLabel: "Live Demo", demoDisabled: false,
+    demo: "https://vital-scan-ai-drab.vercel.app",
+    demoLabel: "Live Demo",
+    demoDisabled: false,
   },
   {
     id: 3,
@@ -88,7 +92,9 @@ export const projects = [
     techStack: ["React", "Node.js", "Express.js", "MongoDB", "Tailwind CSS", "JWT", "REST API"],
     impact: "Enables collaborative learning without cost barriers — scalable for community-based growth.",
     github: "https://github.com/sapan-gandhi",
-    demo: "#", demoLabel: "Coming Soon", demoDisabled: true,
+    demo: "https://skillswap-two-neon.vercel.app",
+    demoLabel: "Live Demo",
+    demoDisabled: false,
   },
   {
     id: 4,
@@ -103,7 +109,9 @@ export const projects = [
     techStack: ["Python", "Scikit-learn", "NLP", "TF-IDF", "FastAPI", "React", "Tailwind CSS"],
     impact: "Enhances cybersecurity through automated detection — scalable for messaging or enterprise systems.",
     github: "https://github.com/sapan-gandhi",
-    demo: "#", demoLabel: "Coming Soon", demoDisabled: true,
+    demo: "#",
+    demoLabel: "Coming Soon",
+    demoDisabled: true,
   },
 ];
 

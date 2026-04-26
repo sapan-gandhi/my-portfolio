@@ -4,41 +4,30 @@ const SYSTEM_PROMPT = `You are Sapan Gandhi's personal AI assistant on his portf
 
 PERSONAL INFO:
 - Name: Sapan Gandhi
-- Role: Full Stack Developer & AI/ML Enthusiast
-- Status: Fresher actively looking for work
-- Degree: B.Tech in Computer Science with Artificial Intelligence
-- University: Parul University, Vadodara, India
-- Location: Vadodara, Gujarat, India
+- Role: Full Stack Developer & AI/ML Enthusiast  
+- Degree: B.Tech CSE with AI, Parul University, Vadodara
 - Email: sapgandhi811@gmail.com
 - GitHub: https://github.com/sapan-gandhi
 - LinkedIn: https://www.linkedin.com/in/sapan-gandhi-65b15b311
+- Portfolio: https://my-portfolio-pi-seven-46.vercel.app
 
-SKILLS:
-- Languages: Python, Java, C, JavaScript
-- Frontend: HTML, CSS, React, Tailwind CSS
-- Backend: Node.js, Express.js
-- Databases: MongoDB, MySQL, Supabase
-- Tools: Git, GitHub, REST APIs, Postman, Vercel
-- AI/ML: ML fundamentals, prediction systems, recommendation logic
+EXPERIENCE:
+- Frontend Developer Intern at 1Stop.ai (Jul 2025 - Sep 2025)
+- Built responsive web apps with React and Tailwind CSS
 
 PROJECTS:
-1. VitalScan-AI - AI health risk prediction platform
-   Live: https://vital-scan-ai-drab.vercel.app
-   GitHub: https://github.com/sapan-gandhi/VitalScan-AI
-   Tech: Python, React, Node.js, ML Model, REST API, Vercel
+1. HireSense AI - Live: https://hire-sense-ai-mocha.vercel.app | GitHub: https://github.com/sapan-gandhi/HireSense-AI | AI resume analysis, skill gap detection, shortlist probability scoring, 30+ interview Q&A | Tech: React, Node.js, MongoDB, ML
+2. VitalScan-AI - Live: https://vital-scan-ai-drab.vercel.app | GitHub: https://github.com/sapan-gandhi/VitalScan-AI | ML disease risk prediction from patient vitals | Tech: Python, React, Node.js, Scikit-learn
+3. SkillSwap - Live: https://skillswap-two-neon.vercel.app | Peer-to-peer skill exchange MERN platform with JWT auth | Tech: React, Node.js, MongoDB, JWT
+4. Threat Detection System - AI spam/malicious text classifier using NLP and TF-IDF | Tech: Python, Scikit-learn, FastAPI, React
 
-2. Job Recommendation System - AI career matching engine
-   GitHub: https://github.com/sapan-gandhi/Job-Recommendation
-   Tech: Python, React, Node.js, ML Algorithms, REST API, MongoDB
+SKILLS: React, Node.js, Python, MongoDB, Express.js, FastAPI, Tailwind CSS, Scikit-learn, NLP, TF-IDF, JWT, Git
 
-AVAILABILITY: Open to internships, entry-level roles, and freelance. Can start immediately.
+CERTIFICATIONS: JPMorgan Chase/Forage (Mar 2026), AWS Cloud Foundations (Sep 2025), Data Analyst/OneRoadmap (Jun 2025), JavaScript/OneRoadmap (Jun 2025), Generative AI/LinkedIn (Aug 2024), SQL/LetsUpgrade (Aug 2024)
 
-RULES:
-- Keep answers short (2-4 sentences max unless detail is requested)
-- Be friendly and professional
-- For contact questions give email: sapgandhi811@gmail.com
-- Never make up information
-- Plain text only, no markdown`
+AVAILABILITY: Actively looking for internships, entry-level roles, and freelance. Can start immediately.
+
+RULES: Keep answers short (2-4 sentences). Be friendly and professional. Share live links when asked about projects. Plain text only.`
 
 async function chat(req, res) {
   try {
@@ -74,18 +63,10 @@ async function chat(req, res) {
 
 function callClaude(body, apiKey) {
   return new Promise((resolve, reject) => {
-    const options = {
-      hostname: 'api.anthropic.com',
-      path: '/v1/messages',
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01',
-        'Content-Length': Buffer.byteLength(body),
-      },
-    }
-    const req = https.request(options, (response) => {
+    const req = https.request({
+      hostname: 'api.anthropic.com', path: '/v1/messages', method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey, 'anthropic-version': '2023-06-01', 'Content-Length': Buffer.byteLength(body) }
+    }, (response) => {
       let data = ''
       response.on('data', chunk => { data += chunk })
       response.on('end', () => {
@@ -98,7 +79,7 @@ function callClaude(body, apiKey) {
       })
     })
     req.on('error', (e) => reject(e))
-    req.setTimeout(10000, () => { req.destroy(); reject(new Error('Claude API timeout')) })
+    req.setTimeout(10000, () => { req.destroy(); reject(new Error('Timeout')) })
     req.write(body)
     req.end()
   })
@@ -107,92 +88,65 @@ function callClaude(body, apiKey) {
 function getFallback(message) {
   const m = message.toLowerCase()
 
-  // ── Availability / hiring — check FIRST before projects ──
-  if (
-    m.includes('open to work') || m.includes('are you open') ||
-    m.includes('available') || m.includes('hire') || m.includes('hiring') ||
-    m.includes('internship') || m.includes('opportunity') || m.includes('looking for') ||
-    m.includes('job') || m.includes('freelance') || m.includes('full time') ||
-    m.includes('part time') || m.includes('position') || m.includes('role')
-  ) {
-    return "Yes! Sapan is actively looking for internships, entry-level roles, and freelance opportunities. He can start immediately. Reach out at sapgandhi811@gmail.com!"
+  if (m.includes('open to work') || m.includes('are you open') || m.includes('available') ||
+      m.includes('hire') || m.includes('internship') || m.includes('opportunity') ||
+      m.includes('freelance') || m.includes('position') || m.includes('role')) {
+    return "Yes! Sapan is actively looking for internships, entry-level roles, and freelance opportunities. He can start immediately. Email him at sapgandhi811@gmail.com!"
   }
 
-  // ── Skills ──
-  if (m.includes('skill') || m.includes('tech') || m.includes('stack') || m.includes('know') || m.includes('language') || m.includes('expertise')) {
-    return "Sapan is skilled in React, Node.js, Python, MongoDB, Express.js, and Tailwind CSS. He also works with AI/ML for building intelligent products like prediction systems and recommendation engines."
+  if (m.includes('hiresense') || m.includes('hire sense') || m.includes('resume') || m.includes('career intelligence')) {
+    return "HireSense AI is Sapan's AI career platform — resume-JD matching, skill gap detection, shortlist scoring, and 30+ interview Q&A. Live at hire-sense-ai-mocha.vercel.app!"
   }
 
-  // ── Specific projects ──
-  if (m.includes('vitalscan') || m.includes('vital scan') || m.includes('health')) {
-    return "VitalScan-AI is Sapan's health risk prediction platform. It uses machine learning to predict disease risk from patient vitals. It's live at vital-scan-ai-drab.vercel.app — check it out!"
+  if (m.includes('vitalscan') || m.includes('vital scan') || m.includes('health') || m.includes('disease')) {
+    return "VitalScan-AI predicts disease risk from patient vitals using ML. Live at vital-scan-ai-drab.vercel.app. Built with Python, React, Node.js, and Scikit-learn!"
   }
 
-  if (m.includes('job recommendation') || m.includes('recommendation system')) {
-    return "The Job Recommendation System is an AI-driven career matching engine that matches candidate profiles to relevant opportunities using ML algorithms. Find it on Sapan's GitHub!"
+  if (m.includes('skillswap') || m.includes('skill swap') || m.includes('skill exchange')) {
+    return "SkillSwap is a MERN platform for peer-to-peer skill exchange. Users list skills they offer/want and connect with matches. Live at skillswap-two-neon.vercel.app!"
   }
 
-  if (m.includes('project') || m.includes('built') || m.includes('portfolio') || m.includes('app') || m.includes('application')) {
-    return "Sapan has built VitalScan-AI (an AI health risk prediction platform) and a Job Recommendation System. Both are full-stack AI-powered applications deployed and available on GitHub!"
+  if (m.includes('threat') || m.includes('spam') || m.includes('malicious') || m.includes('nlp') || m.includes('detection')) {
+    return "The Threat Detection System classifies spam and malicious text in real-time using NLP, TF-IDF, and Scikit-learn — with a FastAPI backend and React frontend."
   }
 
-  // ── Contact ──
-  if (m.includes('contact') || m.includes('email') || m.includes('reach') || m.includes('message') || m.includes('connect') || m.includes('touch')) {
-    return "You can reach Sapan at sapgandhi811@gmail.com or connect on LinkedIn at linkedin.com/in/sapan-gandhi-65b15b311. He usually responds within 24 hours!"
+  if (m.includes('project') || m.includes('built') || m.includes('demo') || m.includes('live') || m.includes('app')) {
+    return "Sapan has 4 projects: HireSense AI (hire-sense-ai-mocha.vercel.app), VitalScan-AI (vital-scan-ai-drab.vercel.app), SkillSwap (skillswap-two-neon.vercel.app), and Threat Detection System. All on GitHub!"
   }
 
-  // ── About ──
-  if (m.includes('who') || m.includes('about') || m.includes('sapan') || m.includes('tell me') || m.includes('introduce')) {
-    return "Sapan Gandhi is a Full Stack Developer & AI/ML Enthusiast from Vadodara, India. He's pursuing B.Tech in CS with AI at Parul University and builds intelligent web products using React, Node.js, and Python."
+  if (m.includes('skill') || m.includes('tech') || m.includes('stack') || m.includes('language')) {
+    return "Sapan works with React, Node.js, Python, MongoDB, Express.js, FastAPI, and Tailwind CSS. For AI/ML: Scikit-learn, NLP, TF-IDF, and feature engineering."
   }
 
-  // ── GitHub ──
+  if (m.includes('experience') || m.includes('intern') || m.includes('1stop')) {
+    return "Sapan interned as a Frontend Developer at 1Stop.ai (Jul–Sep 2025), building responsive web apps with React and Tailwind CSS."
+  }
+
+  if (m.includes('certif') || m.includes('aws') || m.includes('jpmorgan') || m.includes('course')) {
+    return "Sapan has 6 certifications: JPMorgan Chase/Forage, AWS Cloud Foundations, Data Analyst & JavaScript (OneRoadmap), Generative AI (LinkedIn), and SQL Bootcamp (LetsUpgrade)."
+  }
+
+  if (m.includes('contact') || m.includes('email') || m.includes('reach')) {
+    return "Reach Sapan at sapgandhi811@gmail.com or LinkedIn: linkedin.com/in/sapan-gandhi-65b15b311. He responds within 24 hours!"
+  }
+
+  if (m.includes('who') || m.includes('about') || m.includes('sapan') || m.includes('tell me')) {
+    return "Sapan Gandhi is a Full Stack Developer & AI/ML Enthusiast from Vadodara, India. B.Tech CS with AI at Parul University. He's built 4 live projects and has real internship experience."
+  }
+
   if (m.includes('github')) {
-    return "Sapan's GitHub is github.com/sapan-gandhi — you can find his projects VitalScan-AI and Job Recommendation System there!"
+    return "Sapan's GitHub: github.com/sapan-gandhi — find HireSense AI, VitalScan-AI, SkillSwap, and Threat Detection System there!"
   }
 
-  // ── LinkedIn ──
-  if (m.includes('linkedin')) {
-    return "Connect with Sapan on LinkedIn at linkedin.com/in/sapan-gandhi-65b15b311. He's open to networking and new opportunities!"
+  if (m.includes('hello') || m.includes('hi') || m.includes('hey') || m.includes('hii')) {
+    return "Hello! I'm Sapan's AI assistant. Ask me about his projects, skills, experience, or how to contact him!"
   }
 
-  // ── Education ──
-  if (m.includes('university') || m.includes('college') || m.includes('degree') || m.includes('education') || m.includes('study') || m.includes('btech') || m.includes('b.tech')) {
-    return "Sapan is pursuing B.Tech in Computer Science with Artificial Intelligence at Parul University, Vadodara, India."
+  if (m.includes('thank')) {
+    return "You're welcome! Feel free to reach Sapan at sapgandhi811@gmail.com. Have a great day!"
   }
 
-  // ── Location ──
-  if (m.includes('location') || m.includes('where') || m.includes('city') || m.includes('india') || m.includes('vadodara')) {
-    return "Sapan is based in Vadodara, Gujarat, India. He's open to remote work and on-site opportunities."
-  }
-
-  // ── Frontend ──
-  if (m.includes('frontend') || m.includes('react') || m.includes('ui') || m.includes('css') || m.includes('tailwind')) {
-    return "For frontend, Sapan works with React, Tailwind CSS, HTML, and CSS. He builds responsive, accessible, and performant user interfaces."
-  }
-
-  // ── Backend ──
-  if (m.includes('backend') || m.includes('server') || m.includes('api') || m.includes('node') || m.includes('express')) {
-    return "For backend, Sapan uses Node.js and Express.js to build RESTful APIs. He's experienced with MongoDB, MySQL, and Supabase for databases."
-  }
-
-  // ── AI/ML ──
-  if (m.includes('python') || m.includes('ml') || m.includes('ai') || m.includes('machine learning') || m.includes('artificial intelligence')) {
-    return "Sapan works with Python for AI/ML projects. He has experience building prediction systems, recommendation engines, and integrating ML models into full-stack web applications."
-  }
-
-  // ── Greetings ──
-  if (m.includes('hello') || m.includes('hi') || m.includes('hey') || m.includes('hii') || m.includes('helo')) {
-    return "Hello! I'm Sapan's AI assistant. I can tell you about his skills, projects, availability, or how to contact him. What would you like to know?"
-  }
-
-  // ── Thanks ──
-  if (m.includes('thank') || m.includes('thanks') || m.includes('great') || m.includes('awesome')) {
-    return "You're welcome! Feel free to reach out to Sapan directly at sapgandhi811@gmail.com. Have a great day!"
-  }
-
-  // ── Default ──
-  return "I'm Sapan's AI assistant! I can answer questions about his skills, projects, availability, or how to contact him. What would you like to know?"
+  return "I'm Sapan's AI assistant! Ask me about his 4 live projects, skills, internship experience, or certifications. What would you like to know?"
 }
 
 module.exports = { chat }
